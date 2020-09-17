@@ -44,43 +44,53 @@ namespace FileReader
                 TextFile.FindLeet,TextFile.FindPhoneNumbers};
             file.ReadFile(actionMethods);
 
-            Console.WriteLine($"\nTotal chapters listed: {file.GetChapters().Count}");
-            Console.WriteLine($"\nLeet Translations: ");
-            foreach (KeyValuePair<string, string> pair in file.GetLeetWords())
-            {
-                Console.WriteLine($"{pair.Key} {pair.Value}");
-            }
-            Console.WriteLine($"\nDate Found: {file.GetDate().ToString("yyyy-MM-dd")}");
-            Console.WriteLine("\nPhone Numbers Found:");
-            foreach (string value in file.GetPhoneNumbers())
-            {
-                Console.WriteLine($"{value}");
-            }
+            WriteChapters(file);
+            WriteLeet(file);
+            WriteDate(file);
+            WritePhoneNumbers(file);
         }
 
         public static void DisplayChapters(IFileReader file)
         {
             file.ReadFile(TextFile.FindChapters);
-            Console.WriteLine($"\nTotal chapters listed: {file.GetChapters().Count}");
+            WriteChapters(file);
         }
 
         public static void DisplayLeet(IFileReader file)
         {
             file.ReadFile(TextFile.FindLeet);
+            WriteLeet(file);
+        }
+        public static void DisplayDate(IFileReader file)
+        {
+            file.ReadFile(TextFile.FindDate);
+            WriteDate(file);
+        }
+        public static void DisplayPhoneNumbers(IFileReader file)
+        {
+            file.ReadFile(TextFile.FindPhoneNumbers);
+            WritePhoneNumbers(file);
+        }
+
+        private static void WriteChapters(IFileReader file)
+        {
+            Console.WriteLine($"\nTotal chapters listed: {file.GetChapters().Count}");
+        }
+        private static void WriteLeet(IFileReader file)
+        {
             Console.WriteLine($"\nLeet Translations: ");
             foreach (KeyValuePair<string, string> pair in file.GetLeetWords())
             {
                 Console.WriteLine($"{pair.Key} {pair.Value}");
             }
         }
-        public static void DisplayDate(IFileReader file)
+        private static void WriteDate(IFileReader file)
         {
-            file.ReadFile(TextFile.FindDate);
             Console.WriteLine($"\nDate Found: {file.GetDate().ToString("yyyy-MM-dd")}");
         }
-        public static void DisplayPhoneNumbers(IFileReader file)
+
+        private static void WritePhoneNumbers(IFileReader file)
         {
-            file.ReadFile(TextFile.FindPhoneNumbers);
             Console.WriteLine("\nPhone Numbers Found:");
             foreach (string value in file.GetPhoneNumbers())
             {
