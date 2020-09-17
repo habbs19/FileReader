@@ -7,6 +7,7 @@ namespace FileReader
     public interface IFileReader
     {
         public void ReadFile(Action<string> actionMethod);
+        public void ReadFile(List<Action<string>> actionMethod);
 
         public IDictionary<string, string> GetLeetWords();
 

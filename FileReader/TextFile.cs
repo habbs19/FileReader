@@ -118,6 +118,16 @@ namespace FileReader
                 actionMethod(line);
             }
         }
+        public void ReadFile(List<Action<string>> actionMethods)
+        {
+            foreach (string line in File.ReadLines(_filepath))
+            {
+                foreach(Action<string> method in actionMethods)
+                {
+                    method(line);
+                }
+            }
+        }
 
         public enum Months
         {
