@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.IO;
 using System.Collections.Generic;
+using System.Net.Mail;
 
 namespace FileReader
 {
@@ -21,7 +22,7 @@ namespace FileReader
                         Console.WriteLine("Thank You. Beginning Process...");
 
                         IFileReader file = new TextFile(path);
-
+                       
                         DisplayChapters(file);
                         DisplayLeet(file);
                         DisplayPhoneNumbers(file);

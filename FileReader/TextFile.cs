@@ -20,23 +20,13 @@ namespace FileReader
         {
             _filepath = filepath;
         }
-        public IDictionary<string, string> GetLeetWords()
-        {
-            return _leetWords;
-        }
-        public IDictionary<string, string> GetChapters()
-        {
-            return _chapters;
-        }
-        public IEnumerable<string> GetPhoneNumbers()
-        {
-            return _phoneNumbers;
-        }
-        public DateTime GetDate()
-        {
-            return _date == null ? new DateTime() : _date;
-        }
-        public static object FindChapters(string line)
+
+        public IDictionary<string, string> GetLeetWords() => _leetWords;
+        public IDictionary<string, string> GetChapters() => _chapters;
+        public IEnumerable<string> GetPhoneNumbers() => _phoneNumbers;
+        public DateTime GetDate() => _date == null ? new DateTime() : _date;
+
+        public static void FindChapters(string line)
         {
             string pattern = @"^Chapter\s\d+\..+";
             if(Regex.IsMatch(line, pattern))
@@ -50,10 +40,9 @@ namespace FileReader
                     _chapters.Add(chapter, chapterTitle.Trim());
                 }
             }
-            return _chapters;
         }
 
-        public static object FindLeet(string line)
+        public static void FindLeet(string line)
         {
             string pattern1 = @"^[^aAeEgGiIoOsStT()]+$";
             string pattern2 = @"^(([\d]+)|([\d]+.)|(x[\d]+)|([\d]+-[\d]+)|([\d]+-[\d]+;)|([\d]+,[\d]+))$";
@@ -71,10 +60,9 @@ namespace FileReader
                     }
                 }
             }
-            return _leetWords;
         }
 
-        public static object FindPhoneNumbers(string line)
+        public static void FindPhoneNumbers(string line)
         {
             string pattern = @"(\([\d]{3}\)\s[\d]{3}-[\d]{4}\sx[\d]+)|(\(\d{3}\)\s\d{3}-\d{4})";
             if (Regex.IsMatch(line, pattern))
@@ -83,18 +71,16 @@ namespace FileReader
                 {
                     _phoneNumbers.Add(m.Value);
                 }
-
-            }
-            return _phoneNumbers;
+            }           
         }
-        public static object FindDate(string line)
+        public static void FindDate(string line)
         {
             string pattern = @"\d+th\s\w+\s\w+,\s\d{4}";
             if (Regex.IsMatch(line, pattern))
             {
-                int day = 0;
-                int month = 0;
-                int year = 0;
+                int day = 1;
+                int month = 1;
+                int year = 1;
                 var match = Regex.Match(line, pattern);
                 string[] split = match.Value.Split(' ');               
                 foreach(string s in split)
@@ -114,32 +100,39 @@ namespace FileReader
                     if(Regex.IsMatch(s, @"^[a-zA-Z]+"))
                     {
                         string mth = Regex.Match(s, @"^[a-zA-Z]+").Value;
-                        switch (mth)
+
+                        if (Enum.IsDefined(typeof(Months), mth))
                         {
-                            case "January ":
-                                month = 1;
-                                break;
-                            case "February":
-                                month = 2;
-                                break;
-                            case "March":
-                                break;
-                            default:
-                                break;
+                            month = Convert.ToInt32(Enum.Parse(typeof(Months), mth));
                         }
                     }
                 }
                 _date = new DateTime(year, month, day);
             }
-            return _date;
         }
 
-        public void ReadFile(Func<string, object> actionMethod)
+        public void ReadFile(Action<string> actionMethod)
         {
             foreach (string line in File.ReadLines(_filepath))
             {
                 actionMethod(line);
             }
+        }
+
+        public enum Months
+        {
+            January=1,
+            February,
+            March,
+            April,
+            May,
+            June,
+            July,
+            August,
+            September,
+            October,
+            November,
+            December
         }
 
     }
